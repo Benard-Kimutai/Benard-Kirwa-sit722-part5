@@ -48,5 +48,5 @@ jobs:
 
       - name: Deploy to AKS
         run: |
-          kubectl apply -f ./kubernetes/book_catalog_deployment.yaml
-          kubectl apply -f ./kubernetes/inventory_management_deployment.yaml
+          kubectl apply -f ./book_catalog_deployment.yaml
+          kubectl apply -f ./inventory_management_deployment.yaml
