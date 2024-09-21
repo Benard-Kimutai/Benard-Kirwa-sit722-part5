@@ -41,12 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up KUBECONFIG
+      - name: Change to scripts directory and run deploy.sh
         run: |
-          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
-          export KUBECONFIG=$(pwd)/kubeconfig
-
-      - name: Deploy to AKS
-        run: |
-          kubectl apply -f ./book_catalog_deployment.yaml
-          kubectl apply -f ./inventory_management_deployment.yaml
+          cd scripts
+          ./deploy.sh
