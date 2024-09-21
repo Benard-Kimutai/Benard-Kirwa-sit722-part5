@@ -44,4 +44,5 @@ jobs:
       - name: Change to scripts directory and run deploy.sh
         run: |
           cd scripts
+          chmod +x deploy.sh 
           ./deploy.sh
