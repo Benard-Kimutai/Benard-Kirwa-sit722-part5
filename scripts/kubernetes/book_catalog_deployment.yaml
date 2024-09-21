@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers:
+        - name: book-catalog
+          image: ${CONTAINER_REGISTRY}/book_catalog:${VERSION}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: ${DATABASE_URL} 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8000
+  selector:
+    app: book-catalog
+

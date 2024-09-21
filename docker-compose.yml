@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Book Catalog service
+  book_catalog:
+    build:
+      context: ./book_catalog  
+      dockerfile: Dockerfile
+    container_name: book_catalog
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - backend
+
+  # Inventory Management service
+  inventory_management:
+    build:
+      context: ./inventory_management  
+      dockerfile: Dockerfile
+    container_name: inventory_management
+    restart: always
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - backend
+
+  # PostgreSQL Database service
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: your_db_user
+      POSTGRES_PASSWORD: your_db_password
+      POSTGRES_DB: your_db_name
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:
