@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.REGISTRY_UN }}
           password: ${{ secrets.REGISTRY_PW }}
 
-      - name: Build and push images
+      - name: Build and push images to ACR
         run: |
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }} ./book_catalog
           docker push ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }}
