@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: book-catalog
-          image: ${CONTAINER_REGISTRY}/book_catalog:${VERSION}
+          image: part5acr.azurecr.io/book_catalog:latest
           ports:
             - containerPort: 8000
           env:
