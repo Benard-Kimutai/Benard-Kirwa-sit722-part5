@@ -29,12 +29,19 @@ jobs:
       VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
-      REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
 
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
+
+      # Make scripts executable
+      - name: Make scripts executable
+        run: |
+          chmod +x ./scripts/build-image.sh
+          chmod +x ./scripts/push-image.sh
+          chmod +x ./scripts/deploy.sh
 
       #
       # Builds the Docker image.
@@ -50,8 +57,6 @@ jobs:
 
       #
       # Installs Kubectl and connects it to the cluster.
-      #
-      # https://github.com/marketplace/actions/kubernetes-cli-kubectl
       #
       - uses: tale/kubectl-action@v1
         with:
