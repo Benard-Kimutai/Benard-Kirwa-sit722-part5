@@ -41,8 +41,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Change to scripts directory and run deploy.sh
+      - name: Set up environment variables
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+
+      - name: Deploy to AKS
         run: |
           cd scripts
-          chmod +x deploy.sh 
+          chmod +x deploy.sh
           ./deploy.sh
+
