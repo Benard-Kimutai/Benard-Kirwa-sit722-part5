@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: inventory-management
-          image: ${CONTAINER_REGISTRY}/inventory_management:${VERSION}
+          image: part5acr.azurecr.io/inventory_management:latest
           ports:
             - containerPort: 8001
           env:
