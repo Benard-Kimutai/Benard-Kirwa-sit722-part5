@@ -29,8 +29,11 @@ jobs:
       - name: Build and push images to ACR
         run: |
           set -x  # Enable command logging
+          echo "Building and pushing book_catalog with hash: ${{ github.sha }}"
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }} ./book_catalog
           docker push ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }}
+
+          echo "Building and pushing inventory_management with hash: ${{ github.sha }}"
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/inventory_management:${{ github.sha }} ./inventory_management
           docker push ${{ secrets.CONTAINER_REGISTRY }}/inventory_management:${{ github.sha }}
           set +x  # Disable command logging
@@ -45,8 +48,11 @@ jobs:
 
       - name: Set up environment variables
         run: |
+          echo "Setting up environment variables"
+          echo "CONTAINER_REGISTRY='${{ secrets.CONTAINER_REGISTRY }}'" >> $GITHUB_ENV
+          echo "VERSION='${{ github.sha }}'" >> $GITHUB_ENV
           echo "DATABASE_URL='${{ secrets.DATABASE_URL }}'" >> $GITHUB_ENV
-          echo "DATABASE_URL set to: $DATABASE_URL"  # Log the value for debugging
+          echo "Environment variables set: CONTAINER_REGISTRY=${{ secrets.CONTAINER_REGISTRY }}, VERSION=${{ github.sha }}, DATABASE_URL=${{ secrets.DATABASE_URL }}"
 
       - name: Validate environment variables
         run: |
