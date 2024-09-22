@@ -6,12 +6,10 @@ set -eu  # Exit on unset variables and errors
 
 # Ensure DATABASE_URL is set
 : "${DATABASE_URL:?DATABASE_URL is not set}"
-# : "${CONTAINER_REGISTRY:?CONTAINER_REGISTRY is not set}"
-: "${VERSION:?VERSION is not set}"
+
 
 echo "Using DATABASE_URL: $DATABASE_URL"
-echo "Using CONTAINER_REGISTRY: $CONTAINER_REGISTRY"
-echo "Using VERSION: $VERSION"
+
 
 # Apply the deployment and service configurations
 echo "Substituting YAML for book_catalog_deployment.yaml"
