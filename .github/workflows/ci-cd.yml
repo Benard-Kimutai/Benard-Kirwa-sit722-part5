@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up environment variables
-        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+        run: echo "DATABASE_URL='${{ secrets.DATABASE_URL }}'" >> $GITHUB_ENV
 
       - name: Deploy to AKS
         run: |
