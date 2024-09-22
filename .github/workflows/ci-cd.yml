@@ -28,10 +28,12 @@ jobs:
 
       - name: Build and push images to ACR
         run: |
+          set -x  # Enable command logging
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }} ./book_catalog
           docker push ${{ secrets.CONTAINER_REGISTRY }}/book_catalog:${{ github.sha }}
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/inventory_management:${{ github.sha }} ./inventory_management
           docker push ${{ secrets.CONTAINER_REGISTRY }}/inventory_management:${{ github.sha }}
+          set +x  # Disable command logging
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,11 +44,21 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up environment variables
-        run: echo "DATABASE_URL='${{ secrets.DATABASE_URL }}'" >> $GITHUB_ENV
+        run: |
+          echo "DATABASE_URL='${{ secrets.DATABASE_URL }}'" >> $GITHUB_ENV
+          echo "DATABASE_URL set to: $DATABASE_URL"  # Log the value for debugging
+
+      - name: Validate environment variables
+        run: |
+          if [ -z "${{ secrets.DATABASE_URL }}" ]; then
+            echo "Error: DATABASE_URL is not set."
+            exit 1
+          fi
 
       - name: Deploy to AKS
         run: |
           cd scripts
           chmod +x deploy.sh
+          set -x  # Enable command logging
           ./deploy.sh
-
+          set +x  # Disable command logging
