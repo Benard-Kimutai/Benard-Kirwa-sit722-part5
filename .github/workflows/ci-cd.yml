@@ -1,27 +1,12 @@
-#
-# GitHub Actions workflow.
-#
-# Automatically deploys the Node.js microservice to Kubernetes on push to any branch.
-# For real use, you might want to restrict this to the "prod" branch.
-#
-
-name: Deploy microservice
+name: Deploy microservice with Terraform
 
 on:
-  #
-  # Deploys the microservice on push to the main branch of this code repository.
-  #
-  push: 
+  push:
     branches:
       - main
-
-  #
-  # Allows deployment to be invoked manually through the GitHub Actions user interface.
-  #
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
-
   deploy:
     runs-on: ubuntu-latest
 
@@ -30,11 +15,11 @@ jobs:
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}  # Add DATABASE_URL here
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
     steps:
-
-      # Checks-out your repository under $GITHUB_WORKSPACE.
+      # Checks out your repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
 
       # Make scripts executable
@@ -43,28 +28,29 @@ jobs:
           chmod +x ./scripts/build-image.sh
           chmod +x ./scripts/push-image.sh
           chmod +x ./scripts/deploy.sh
+          chmod +x ./scripts/terraform-init.sh
+          chmod +x ./scripts/terraform-apply.sh
 
-      #
       # Builds the Docker image.
-      #
       - name: Build
         run: ./scripts/build-image.sh
 
-      #
       # Publishes the Docker image to the container registry.
-      #
       - name: Publish
         run: ./scripts/push-image.sh
 
-      #
-      # Installs Kubectl and connects it to the cluster.
-      #
-      - uses: tale/kubectl-action@v1
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-          kubectl-version: v1.24.2
+          terraform_version: 1.5.0 # Specify the Terraform version you want to use
 
-     # Expands the configuration template and deploys the microservice.
-      - name: Deploy
-        working-directory: ./scripts  # Change working directory to ./scripts
-        run: ./deploy.sh
+      # Initialize Terraform
+      - name: Terraform Init
+        run: ./scripts/terraform-init.sh
+
+      # Apply Terraform changes
+      - name: Terraform Apply
+        run: ./scripts/terraform-apply.sh
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }} # Pass KUBE_CONFIG if needed for Terraform
