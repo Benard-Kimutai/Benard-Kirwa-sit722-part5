@@ -17,7 +17,9 @@ jobs:
       REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-
+      APP_NAME: ${{secrets.APP_NAME}}  # Set your app name here
+      APP_VERSION: ${{ github.sha }} 
+      
     steps:
       # Checks out your repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
