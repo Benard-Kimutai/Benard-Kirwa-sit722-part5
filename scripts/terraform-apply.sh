@@ -11,5 +11,3 @@ terraform apply -auto-approve \
   -var="registry_pw=${REGISTRY_PW}" \
   -var="database_url=${DATABASE_URL}" \
   -var="kube_config=${KUBE_CONFIG}" \
-  -var="app_name=${APP_NAME}" \  # Add this line
-  -var="app_version=${APP_VERSION}"  # Add this line
