@@ -1,7 +1,7 @@
 # Sets global variables for this Terraform project.
 
 variable "app_name" {
-  description = "Library"
+  default = "Library"
 }
 
 variable "location" {
@@ -9,5 +9,6 @@ variable "location" {
 }
 
 variable "kubernetes_version" {    
-  description = "1.30.1"
+  default = "1.30.1"
 }
+
