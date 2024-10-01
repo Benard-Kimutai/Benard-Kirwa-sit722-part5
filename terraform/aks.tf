@@ -1,10 +1,10 @@
 # Creates a managed Kubernetes cluster on Azure.
 resource "azurerm_kubernetes_cluster" "cluster" {
-    name                = var.app_name                      # Cluster name
+    name                = "part5-aks"                      # Cluster name
     location            = "Australia East"                  # Set location to Australia East
     resource_group_name = "part5"                           
-    dns_prefix          = var.app_name                      # DNS prefix for the cluster
-    kubernetes_version  = var.kubernetes_version            # Kubernetes version
+    dns_prefix          = "part5-dev"                      # DNS prefix for the cluster
+    kubernetes_version  = "1.30.1"           # Kubernetes version
 
     default_node_pool {
         name            = "default"                         # Node pool name
@@ -14,7 +14,8 @@ resource "azurerm_kubernetes_cluster" "cluster" {
 
     identity {
         type = "SystemAssigned"                             # Use system-assigned managed identity
-    }    
+    }   
+    
 }
 
 # Attach the container registry to the AKS cluster.
